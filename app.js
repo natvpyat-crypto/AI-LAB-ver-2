@@ -68,6 +68,40 @@ app.get("/category/:id", async (req, res) => {
   }
 });
 
+// Сохранение заказа
+app.post("/checkout", async (req, res) => {
+  try {
+    const orderItems = req.body; // массив строк заказа
+
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/orders`, {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE_API_KEY,
+        Authorization: `Bearer ${SUPABASE_API_KEY}`,
+        "Content-Type": "application/json",
+        Prefer: "return=representation"
+      },
+      body: JSON.stringify(orderItems)
+    });
+
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(`Supabase error: ${text}`);
+    }
+
+    const data = await response.json();
+    res.json({
+      success: true,
+      items_saved: data.length,
+      order: data
+    });
+
+  } catch (err) {
+    console.error("Checkout error:", err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server started on http://localhost:${PORT}`);
 });
