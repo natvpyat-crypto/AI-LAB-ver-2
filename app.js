@@ -1,5 +1,6 @@
 import express from "express";
 import fetch from "node-fetch";
+import cors from "cors";
 
 const app = express();
 const PORT = 3000;
@@ -7,6 +8,12 @@ const PORT = 3000;
 // Данные Supabase (подставь свои)
 const SUPABASE_URL = "https://xtfzljerpkrnarnmsshq.supabase.co";
 const SUPABASE_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh0ZnpsamVycGtybmFybm1zc2hxIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2MTI2MzA0NCwiZXhwIjoyMDc2ODM5MDQ0fQ.qY85Bo-suA59S5-M1g3sDGJ8zYLbNqAWbM2OgySmdrE";
+
+// ✅ ВКЛЮЧАЕМ CORS для всех доменов
+app.use(cors());
+
+// ✅ Опционально: поддержка JSON в body
+app.use(express.json());
 
 // Эндпоинт для получения категорий
 app.get("/categories", async (req, res) => {
